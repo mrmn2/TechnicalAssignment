@@ -12,14 +12,19 @@ on:
         type: string
         required: true
 
+permissions:
+  contents: write
+
 jobs:
   change_line:
     name: Change line
-    runs-on: ubuntu-latest
-    steps:
-      - name: dummy
-        run: echo change
+    uses: ./.github/workflows/change_line.yaml
+    with:
+      old_line: ${{ inputs.old_line }}
+      new_line: ${{ inputs.new_line }}
+      file_path: message.txt
   publish:
+    needs: change_line
     name: Publish Container
     runs-on: ubuntu-latest
     steps:

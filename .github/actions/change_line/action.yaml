@@ -1,0 +1,23 @@
+name: Change Line
+description: Change a line in the specified file
+
+inputs:
+  old_line:
+    description: The line that needs to be changed (e.g. tag1)
+    type: string
+    required: true
+  new_line:
+    description: The replacement line (e.g. tag2)
+    type: string
+    required: true
+  file_path:
+    description: The path of the file that will be changed. The path is relative to the project root.
+    type: string
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Change Line
+      run: sed -i "s|^${{ inputs.old_line }}$|${{ inputs.new_line }}|g" ${{ inputs.file_path }}
+      shell: bash

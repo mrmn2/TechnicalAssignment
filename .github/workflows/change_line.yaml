@@ -1,0 +1,46 @@
+on:
+  workflow_call:
+    inputs:
+      old_line:
+        description: The line that needs to be changed
+        type: string
+        required: true
+      new_line:
+        description: The replacement line
+        type: string
+        required: true
+      file_path:
+        description: The path of the file that will be changed. The path is relative to the project root.
+        type: string
+        required: true
+
+jobs:
+  change_line:
+    name: Change Line
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.1.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+      - name: Change line
+        uses: $/.github/actions/change_line
+        with:
+          old_line: ${{ inputs.old_line }}
+          new_line: ${{ inputs.new_line }}
+          file_path: ${{ inputs.file_path }}
+      - name: Check for changes
+        run: |
+          git status
+          if [ $( git diff --quiet ${{ inputs.file_path }} ) -eq 0 ]; then
+            echo "No changes in ${{ inputs.file_path }} detected. Aborting"
+            exit 1
+          fi
+      - name: Commit changed file
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ${{ inputs.file_path }}
+          git commit -m "Update ${{ inputs.file_path }}"
+          git push
