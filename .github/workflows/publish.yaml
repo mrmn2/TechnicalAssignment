@@ -1,0 +1,27 @@
+name: Publish Container
+
+on:
+  workflow_dispatch:
+    inputs:
+      old_line:
+        description: The line that needs to be changed (e.g. tag1)
+        type: string
+        required: true
+      new_line:
+        description: The replacement line (e.g. tag2)
+        type: string
+        required: true
+
+jobs:
+  change_line:
+    name: Change line
+    runs-on: ubuntu-latest
+    steps:
+      - name: dummy
+        run: echo change
+  publish:
+    name: Publish Container
+    runs-on: ubuntu-latest
+    steps:
+      - name: dummy
+        run: echo publish
