@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  app:
+    container_name: technicalassignment
+    image: ghcr.io/mrmn2/technicalassignment:latest
+    # image: localhost/technicalassignment:latest
+    # build:
+    #   dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
